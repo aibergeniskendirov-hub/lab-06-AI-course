@@ -1,92 +1,48 @@
 # JUSTIFICATION — the design of the harness, and why
-<!-- STUDENT: replace -->
 
-Replace this whole template with your own text. Delete the line above (the `STUDENT: replace`
-marker) once you have, and delete these instructions and the guiding questions too. Keep the headings
-that follow. Which dimension each section is graded against is in the README.
-
-Two rules for the whole document:
-
-- **Every claim about a law needs a citation to the instrument and the provision** it rests on,
-  written so a reader can find the text. You identify the instruments yourself, from the primary text.
-  A chat model's statement is not a citation.
-- **Everything you describe must be in the code or in the submitted run.** A control you describe
-  but did not build, or a refusal you state but never triggered, belongs under "what the design still
-  fails to protect against".
-
-The guiding questions are prompts, not a form.
+Статус: код подготовлен; числовые результаты появятся после полного прогона в Colab.
+Это не демонстрационные измерения и не заявление о завершённом эксперименте.
 
 ## 1. What the system may do
 
-(Dimension: Integration of Constraints into the Design.)
-
-- What is the system for, stated narrowly? What decisions may it make on its own, and which may it only
-  inform?
-- For each control you built (input validation, blinding, refusal, log, escalation): which
-  constraint made you build it, and where in the code can a reader find it?
-- Did any constraint change the architecture itself, so that the design would be different without it?
-  Name a decision you made differently because of a constraint, and what you would have done otherwise.
+Скрининг синтетических стипендиальных анкет. До модели выполняются числовые проверки,
+проверки цели/возраста/согласия и текстовых полей. Имя и университет скрываются.
+Агент сохраняется исходным; собственные правила — в student_controls.py и Part 2 notebook.
 
 ## 2. What it must refuse
 
-(Dimension: Refusal Boundaries and Enforcement.)
-
-- What does it refuse (purposes, inputs, applicants)? Where is each refusal enforced in code, and
-  where in your submitted run did it fire?
-- For each refusal: **which legitimate case does it also block**, and who bears that cost? Is that cost
-  acceptable, and why?
-- What happens to a refused request: is it recorded, is anyone told, can the person ask for a decision to
-  be made by a human instead?
+Запрещённая цель, несовершеннолетие, отсутствие согласия, неправильные числовые поля,
+пустой/слишком длинный текст, управляющие символы, явные инструкции в текстовых полях,
+программа вне справочника. Part 4 проверит пять отказов и одну допустимую заявку.
+Возрастное ограничение и whitelist — выбранная политика прототипа, не универсальные требования закона.
 
 ## 3. What record it keeps
 
-(Dimension: Accountability Record and Auditability.)
-
-- What is the **audit question** your record is designed to answer (for example, "why did this
-  applicant get this outcome, and could someone else reconstruct it without re-running the model?")?
-  State it in one sentence, then show that a record in `decisions.jsonl` answers it.
-- What is in each record, and what is left out on purpose (for example, personal data you chose not to
-  store)? Why that line?
-- How long is the record kept, who may read it, who may change it, and what stops a record being
-  edited after the fact? What does the record not let you reconstruct?
+Одна JSONL-запись на каждый after-вызов screen, включая refusal/escalation: идентификаторы,
+хеш входа, показанные/скрытые поля, версия модели/prompt, конфигурация, raw output, score,
+model decision, итоговый маршрут, причины и время. Журнал не защищён от редактирования;
+реальная очередь review, управление доступом и сроками хранения не реализованы.
 
 ## 4. The legal constraints
 
-(Dimension: Identification and Citation of Legal Constraints.)
-
-- Which instruments apply to an automated screening decision about people, and why do they
-  apply to this system (jurisdiction, subject matter, who is the operator)? Cite the instrument and the
-  provision for each.
-- For each, what does the law **require** of the system, and what does it merely **permit** or leave
-  to you? Where did you do more than the law requires, and why?
-- Where is the text you cite stated to apply to automated decisions specifically? If you could
-  not find a provision for a control, say so rather than inventing one.
+Ссылки на конкретные нормы и их применимость приведены в CONTROL_REGISTER notebook:
+Закон РК № 94-V от 21.05.2013, ст. 7(1), 19-1; Закон РК № 230-VIII от 17.11.2025,
+ст. 6, 15–16, 18, 21. Официальные ссылки включены в строки реестра.
+Это проектные ориентиры для предполагаемого фонда в РК; данные эксперимента вымышлены.
+Развёрнутый текст с ссылками будет сохранён генератором отчётов после измерений.
 
 ## 5. The ethical principles
 
-(Dimension: Identification of Applicable Ethical Principles.)
-
-- Which principles govern an automated screening decision, and which decision in **this** system does
-  each bear on (not in general)? Cite the source in which you found each principle named, and say
-  what status that text has.
-- Where do the principles conflict with one another in your design (for example, between
-  treating applicants identically and treating applicants fairly given what you measured)? Which did
-  you put first, and why?
-- Where does ethics demand something the law does not?
+OECD Recommendation on AI (2019, updated 2024), §§1.2–1.5: fairness/privacy,
+transparency/explainability, robustness/security/safety, accountability. Это рекомендация,
+не закон. Контроли ограничивают показанные признаки, останавливают недопустимые запросы,
+делают решение проверяемым и передают сомнительные случаи человеку.
 
 ## 6. The trade-offs
 
-(Dimension: Trade-off Analysis and Justification.)
-
-- For each control: what does it cost (errors, speed, reviewer time, applicant privacy, extra model
-  calls), and what harm does it prevent? Use your before-and-after measurement where you can.
-- The width of your escalation band is a trade-off too: how many applicants does it send to a person, who reads
-  them, and what happens to the cases outside it that nobody re-checks? A threshold calibrated on one
-  configuration does not transfer to another: did you recalibrate it after you changed what the model
-  sees, and what share was actually escalated?
-- Why did you choose the balance you did, and what would make you choose differently?
-- What does the design **still fail to protect against**? What would closing that gap take, and why did
-  you not do it?
+Band выбирается по baseline-распределению до after. Планируемая нагрузка сравнивается с
+фактической; контрфактический повтор отключён. Blinding меняет сам prompt: after flips,
+равные нулю по построению, не доказывают исправление модели. Числовые результаты ещё не получены.
 
 ## AI-use declaration
 

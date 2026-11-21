@@ -76,7 +76,8 @@ P_NO_CONSENT = 0.05
 
 #: Outcome = (decision, score). ``decision`` is "shortlist" | "reject" | "escalate" | "refuse"; ``score`` is
 #: 0..100 or ``None`` when the decision carries no score (a refusal).
-Outcome = tuple[str, float | None]
+from typing import Optional
+Outcome = tuple[str, Optional[float]]  # Python 3.9-compatible type alias
 
 
 # ----------------------------------------------------------------------------- reference data

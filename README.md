@@ -1,3 +1,33 @@
+# Lab 06 — запуск заполненной версии
+
+[**Открыть notebook в Google Colab**](https://colab.research.google.com/github/aibergeniskendirov-hub/lab-06-AI-course/blob/main/lab06_harness_says_no.ipynb)
+
+Код лабораторной подготовлен для **настоящей Qwen2.5-3B-Instruct на облачном GPU**.
+Веса скачиваются в Colab, ваш ноутбук не выполняет inference. Demo-результатов здесь нет.
+**Статус: требуется облачный прогон; outputs и журнал ещё не получены.**
+
+1. Откройте ссылку выше; Runtime → Change runtime type → **T4 GPU**.
+2. Заполните личные PREDICTION-ячейки перед соответствующими измерениями и выполняйте notebook по порядку.
+3. Последняя ячейка скачает `lab06_results.zip`: REPORT.md, JUSTIFICATION.md, реестр, журнал и results.json.
+4. Сохраните notebook с outputs: File → Download → Download .ipynb.
+5. Загрузите выполненный notebook и файлы из архива в этот форк. AI-use заполните самостоятельно.
+
+AI-use сохранён в исходном виде. Генератор отчётов сохраняет этот раздел **дословно** при перезапуске.
+Остальные технические разделы отчётов автоматически обновляются по фактическим verdicts:
+сохраните собственные правки этих разделов перед повторным прогоном.
+
+В Part 2 реализованы валидация, blinding, ранние отказы, журналирование и escalation.
+Band определяется по baseline до after; сравниваются floors, направления различий, интервалы,
+изменения отдельных профилей, нагрузка review и число вызовов. Six refusal scenarios включены.
+`escalate` — требование ручной проверки, не работающая система очередей/апелляций.
+
+Собственные функции: `student_controls.py`; заполненные строки реестра также видны в notebook.
+`write_reports.py` формирует отчёты только для Qwen, сохраняя личный AI-use.
+`test_controls.py` содержит 12 быстрых тестов без загрузки модели.
+`lab06_core.py` не изменён; в `lab06_data.py` только совместимая с Python 3.9 запись алиаса типа.
+
+## Исходное описание задания
+
 # Lab 06 — The harness that says no
 
 Content: Harness and Reliable AI Systems, Security and Responsible AI · Narxoz University
