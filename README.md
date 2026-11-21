@@ -1,3 +1,26 @@
+# Текущий статус и быстрое завершение
+
+Baseline сохранён: 400 настоящих ответов Qwen, результаты разобраны в REPORT.md.
+Загруженный after оказался повтором BARE: активные контроли не были испытаны, журнала нет.
+Исходный файл без изменений сохранён в evidence/original_colab_run.ipynb.
+
+**В текущем Colab добавьте одну кодовую ячейку и выполните:**
+
+```python
+import urllib.request
+url = 'https://raw.githubusercontent.com/aibergeniskendirov-hub/lab-06-AI-course/main/complete_existing_run.py'
+exec(compile(urllib.request.urlopen(url).read().decode(), url, 'exec'), globals())
+```
+
+Модель и BASE переиспользуются, повторной загрузки весов нет. После after будет скачан
+`lab06_completed.zip`, включающий notebook с outputs, отчёты, register, decisions.jsonl и results.json.
+Архив надо распаковать и заменить одноимённые файлы в форке. AI-use сохранится без изменений.
+Если сессия Colab уже потеряна, используйте [полную подготовленную версию](https://colab.research.google.com/github/aibergeniskendirov-hub/lab-06-AI-course/blob/main/lab06_ready.ipynb).
+
+До этого завершающего запуска набор остаётся неполным; ручного или demo-журнала здесь нет.
+
+---
+
 # Lab 06 — запуск заполненной версии
 
 [**Открыть notebook в Google Colab**](https://colab.research.google.com/github/aibergeniskendirov-hub/lab-06-AI-course/blob/main/lab06_harness_says_no.ipynb)
